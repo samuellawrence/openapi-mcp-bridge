@@ -1,0 +1,42 @@
+[project]
+name = "openapi-mcp-bridge"
+version = "0.1.0"
+description = "A generic MCP server that takes any OpenAPI/Swagger specification and exposes it as MCP tools, allowing AI assistants to search, explore, and execute any REST API."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.26.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "pyyaml>=6.0.0",
+    "thefuzz>=0.22.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pyright>=1.1.0",
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+]
+embedding = [
+    "sentence-transformers>=2.2.0",
+    "numpy>=1.24.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"

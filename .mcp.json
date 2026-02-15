@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "openapi-bridge": {
+      "command": "python",
+      "args": ["-m", "src.server"],
+      "cwd": "/Users/samuel/workspace/py-apps/openapi-mcp-bridge",
+      "env": {
+        "PETSTORE_KEY": "special-key"
+      }
+    }
+  }
+}

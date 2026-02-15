@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv add:*)",
+      "Bash(uv pip:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run:*)",
+      "Bash(pytest:*)",
+      "Bash(.venv/bin/pytest:*)",
+      "Bash(python:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(uvicorn:*)",
+      "Bash(.venv/bin/uvicorn:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(kill:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(ls:*)",
+      "Bash(pwd:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(touch:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(git status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ]
+  }
+}

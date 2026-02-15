@@ -1,0 +1,38 @@
+{
+  "apis": [
+    {
+      "name": "local-petstore",
+      "spec_url": "http://localhost:8000/openapi.json",
+      "base_url": "http://localhost:8000",
+      "auth": {
+        "type": "api_key",
+        "token": "test-key-123",
+        "header_name": "X-API-Key",
+        "api_key_in": "header"
+      },
+      "settings": {
+        "default_page_size": 20,
+        "max_batch_size": 50,
+        "rate_limit_per_second": 10,
+        "confirm_destructive": true
+      }
+    },
+    {
+      "name": "petstore-swagger",
+      "spec_url": "https://petstore3.swagger.io/api/v3/openapi.json",
+      "base_url": "https://petstore3.swagger.io/api/v3",
+      "auth": {
+        "type": "api_key",
+        "token": "special-key",
+        "header_name": "api_key",
+        "api_key_in": "header"
+      },
+      "settings": {
+        "default_page_size": 20,
+        "max_batch_size": 50,
+        "rate_limit_per_second": 5,
+        "confirm_destructive": true
+      }
+    }
+  ]
+}
