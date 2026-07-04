@@ -74,6 +74,13 @@ Edit `config/apis.json` to add your API:
 }
 ```
 
+### Xquik API Example
+
+For a real authenticated OpenAPI 3.1 API, copy
+`config/xquik.apis.example.json` to your active config and set
+`XQUIK_API_KEY`. The example registers Xquik's public spec for X/Twitter
+automation, trends, tweet search, media, monitor, and webhook endpoints.
+
 ### Run the Server
 
 ```bash
