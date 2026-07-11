@@ -1,0 +1,21 @@
+{
+  "apis": [
+    {
+      "name": "xquik",
+      "spec_url": "https://xquik.com/openapi.json",
+      "base_url": "https://xquik.com",
+      "auth": {
+        "type": "api_key",
+        "token": "$XQUIK_API_KEY",
+        "header_name": "x-api-key",
+        "api_key_in": "header"
+      },
+      "settings": {
+        "default_page_size": 20,
+        "max_batch_size": 50,
+        "rate_limit_per_second": 5,
+        "confirm_destructive": true
+      }
+    }
+  ]
+}
