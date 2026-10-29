@@ -3,7 +3,7 @@
 import logging
 from typing import Any
 
-import numpy as np
+import numpy as np  # pyright: ignore[reportMissingImports]
 
 from ..parser import Endpoint
 from .base import SearchProvider, SearchResult
