@@ -183,7 +183,7 @@ async def execute_endpoint(
     params: dict[str, Any] | None = None,
     body: dict[str, Any] | None = None,
     headers: dict[str, str] | None = None,
-    limit: int = 20,
+    limit: int | None = None,
     offset: int = 0,
     confirmed: bool = False,
 ) -> dict[str, Any]:
@@ -200,7 +200,7 @@ async def execute_endpoint(
         params: Query and path parameters as a dict
         body: Request body for POST/PUT/PATCH
         headers: Additional headers
-        limit: Response truncation limit (default: 20)
+        limit: Response truncation limit (default: the API's default_page_size)
         offset: Pagination offset (default: 0)
         confirmed: Required true for destructive operations (DELETE, PUT, PATCH)
     """
@@ -214,8 +214,13 @@ async def execute_endpoint(
             "available_apis": available,
         }
 
-    # Check guardrails
-    check = guardrails.check_operation(method, path, confirmed)
+    executor = executors[api]
+    settings = executor.config.settings
+
+    # Check guardrails (skipped when the API sets confirm_destructive=false)
+    check = guardrails.check_operation(
+        method, path, confirmed or not settings.confirm_destructive
+    )
     if not check.allowed:
         return {
             "status_code": 0,
@@ -225,14 +230,13 @@ async def execute_endpoint(
         }
 
     # Execute the request
-    executor = executors[api]
     result = await executor.execute(
         path=path,
         method=method,
         params=params,
         body=body,
         headers=headers,
-        limit=limit,
+        limit=limit if limit is not None else settings.default_page_size,
         offset=offset,
     )
 
@@ -280,6 +284,17 @@ async def batch_execute(
             "available_apis": available,
         }
 
+    executor = executors[api]
+    max_batch_size = executor.config.settings.max_batch_size
+    if len(requests) > max_batch_size:
+        return {
+            "error": (
+                f"Batch has {len(requests)} requests; "
+                f"the limit for '{api}' is {max_batch_size}"
+            ),
+            "hint": "Split the requests into smaller batches",
+        }
+
     # Always require confirmation for batch operations
     if not confirmed:
         # Build summary of what will be executed
@@ -295,7 +310,6 @@ async def batch_execute(
         }
 
     # Execute batch
-    executor = executors[api]
     batch = BatchExecutor(executor, concurrency=5)
     result = await batch.execute_batch(requests, parallel=parallel)
 
