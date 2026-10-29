@@ -87,6 +87,7 @@ class TestFuzzySearchBaseline:
         # Should find DELETE endpoints
 
 
+@pytest.mark.network
 class TestEmbeddingSearch:
     """Test embedding search (requires sentence-transformers)."""
 
@@ -134,6 +135,7 @@ def print_comparison_table(fuzzy_results, embedding_results, query):
     print()
 
 
+@pytest.mark.network
 class TestSearchComparison:
     """Run comparison between fuzzy and embedding search."""
 

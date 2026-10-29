@@ -33,6 +33,9 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+    "network: needs internet access and the embedding extra (downloads a model)",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
@@ -40,3 +43,5 @@ packages = ["src"]
 [tool.pyright]
 pythonVersion = "3.10"
 typeCheckingMode = "basic"
+venvPath = "."
+venv = ".venv"
