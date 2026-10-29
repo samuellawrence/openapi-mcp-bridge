@@ -1,5 +1,7 @@
 # OpenAPI MCP Bridge
 
+[![CI](https://github.com/samuellawrence/openapi-mcp-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/samuellawrence/openapi-mcp-bridge/actions/workflows/ci.yml)
+
 A generic MCP server that takes any OpenAPI/Swagger specification and exposes it as MCP tools, allowing AI assistants to search, explore, and execute any REST API.
 
 ## Architecture
@@ -39,7 +41,7 @@ A generic MCP server that takes any OpenAPI/Swagger specification and exposes it
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/openapi-mcp-bridge.git
+git clone https://github.com/samuellawrence/openapi-mcp-bridge.git
 cd openapi-mcp-bridge
 
 # Install with uv
@@ -374,6 +376,15 @@ pytest tests/test_parser.py tests/test_search.py tests/test_executor.py -v
 ```bash
 # Requires mock server to start automatically
 pytest tests/test_integration.py -v
+```
+
+### Run Embedding Tests
+
+These are marked `network`: they need the `embedding` extra and download a model. CI skips them.
+
+```bash
+pytest tests/ -m network -v       # only embedding tests
+pytest tests/ -m "not network" -v # everything else (what CI runs)
 ```
 
 ### Start Mock Server Manually

@@ -81,6 +81,16 @@ async def initialize():
         logger.warning(f"Config file not found: {config_path}")
 
 
+async def get_state() -> tuple[APIRegistry, SearchProvider, Guardrails]:
+    """Return the initialized globals, initializing them on first use."""
+    if registry is None or search_provider is None or guardrails is None:
+        await initialize()
+    assert registry is not None
+    assert search_provider is not None
+    assert guardrails is not None
+    return registry, search_provider, guardrails
+
+
 def endpoint_to_dict(endpoint: Endpoint) -> dict[str, Any]:
     """Convert an Endpoint to a serializable dict."""
     return {
@@ -113,8 +123,7 @@ async def list_apis() -> list[dict[str, Any]]:
     Returns a list of APIs with their name, base_url, description,
     authentication type, and number of endpoints.
     """
-    if registry is None:
-        await initialize()
+    registry, _, _ = await get_state()
 
     return registry.list_apis()
 
@@ -136,8 +145,7 @@ async def search_endpoints(
         query: Natural language description of what you're looking for
         limit: Maximum number of results to return (default: 5)
     """
-    if registry is None:
-        await initialize()
+    registry, search_provider, _ = await get_state()
 
     # Check if API exists
     if api not in registry.get_api_names():
@@ -196,8 +204,7 @@ async def execute_endpoint(
         offset: Pagination offset (default: 0)
         confirmed: Required true for destructive operations (DELETE, PUT, PATCH)
     """
-    if registry is None:
-        await initialize()
+    registry, _, guardrails = await get_state()
 
     # Check if API exists
     if api not in executors:
@@ -263,8 +270,7 @@ async def batch_execute(
         parallel: Execute in parallel if true (default: true)
         confirmed: Required true to proceed with batch execution
     """
-    if registry is None:
-        await initialize()
+    registry, _, _ = await get_state()
 
     # Check if API exists
     if api not in executors:

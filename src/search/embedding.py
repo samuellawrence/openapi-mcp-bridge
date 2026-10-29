@@ -19,7 +19,7 @@ def _get_model(model_name: str = "all-MiniLM-L6-v2"):
     global _model
     if _model is None:
         try:
-            from sentence_transformers import SentenceTransformer
+            from sentence_transformers import SentenceTransformer  # pyright: ignore[reportMissingImports]
             logger.info(f"Loading embedding model: {model_name}")
             _model = SentenceTransformer(model_name)
             logger.info("Embedding model loaded successfully")
