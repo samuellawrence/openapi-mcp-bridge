@@ -3,6 +3,7 @@
 import asyncio
 import base64
 import re
+import time
 from typing import Any
 
 import httpx
@@ -29,6 +30,30 @@ class BatchResult(BaseModel):
     summary: dict[str, int]  # {"total": N, "succeeded": N, "failed": N}
 
 
+class RateLimiter:
+    """Spaces request starts so no more than `rate` begin per second."""
+
+    def __init__(self, rate: int):
+        """
+        Initialize the rate limiter.
+
+        Args:
+            rate: Maximum requests per second.
+        """
+        self.interval = 1.0 / rate
+        self._next_slot = 0.0
+        self._lock = asyncio.Lock()
+
+    async def acquire(self) -> None:
+        """Wait until the next request slot is available."""
+        async with self._lock:
+            now = time.monotonic()
+            wait = self._next_slot - now
+            self._next_slot = max(now, self._next_slot) + self.interval
+        if wait > 0:
+            await asyncio.sleep(wait)
+
+
 class AsyncAPIExecutor:
     """Async HTTP executor for API calls."""
 
@@ -41,6 +66,7 @@ class AsyncAPIExecutor:
         """
         self.config = config
         self.base_url = config.base_url.rstrip("/")
+        self.rate_limiter = RateLimiter(config.settings.rate_limit_per_second)
 
     async def execute(
         self,
@@ -85,6 +111,8 @@ class AsyncAPIExecutor:
             query_params["limit"] = limit
         if offset is not None:
             query_params["offset"] = offset
+
+        await self.rate_limiter.acquire()
 
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:

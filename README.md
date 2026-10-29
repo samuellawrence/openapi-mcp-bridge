@@ -135,10 +135,10 @@ Environment variables can be referenced with `$VAR_NAME` syntax.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `default_page_size` | 20 | Default limit for list responses |
-| `max_batch_size` | 50 | Maximum requests in batch execution |
-| `rate_limit_per_second` | 5 | Rate limiting for requests |
-| `confirm_destructive` | true | Require confirmation for DELETE/PUT/PATCH |
+| `default_page_size` | 20 | Truncation limit for list responses when `execute_endpoint` gets no `limit` |
+| `max_batch_size` | 50 | Maximum requests in one `batch_execute` call; larger batches are rejected |
+| `rate_limit_per_second` | 5 | Maximum requests started per second against this API |
+| `confirm_destructive` | true | Require `confirmed=true` for DELETE/PUT/PATCH. Set `false` only for APIs where that is safe |
 
 ## Search Providers
 
